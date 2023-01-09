@@ -22,11 +22,11 @@ use GuzzleHttp\Client;
 
             $client = new Client([
             'timeout' => 2.0,
-            //'verify' => __DIR__ . '/cacert.pem' timecode: 20:09 lien: https://www.youtube.com/watch?v=I5tFlK5PPjc&t=297s
+            //'verify' => __DIR__ . '/cacert.pem' timecode: 20:09
             ]);
             try {
-                $response = $client->request('GET','https://accounts.google.com/.well-known/openid-configuration');
-                $discoveryJSON = json_decode((string)$response->getBody());
+                $response = $client->request('GET','https://accounts.google.com/.well-known/openid-configuration'); //A
+                $discoveryJSON = json_decode((string)$response->getBody()); //B 
                 $tokenEndPoint = $discoveryJSON->token_endpoint;
                 $userinfoEndpoint = $discoveryJSON->userinfo_endpoint;
                 $response = $client->request('POST', $tokenEndPoint, [
@@ -37,14 +37,14 @@ use GuzzleHttp\Client;
                         'redirect_uri' => 'http://localhost/stage/oauth/oauth.php',
                         'grant_type' => 'authorization_code'
                     ]
-                ]);
-                $accessToken = json_decode($response->getBody())->access_token;
+                ]); // C
+                $accessToken = json_decode($response->getBody())->access_token; // D
                 $response = $client->request('GET', $userinfoEndpoint, [
                     'headers' => [
                         'Authorization' => 'Bearer'.$accessToken
                     ]
-                    ]);
-                    $response = json_decode($response->getBody());
+                    ]);// E
+                    $response = json_decode($response->getBody()); // F
                     if ($response->email_verified === true) {
                         session_start();
                         $_SESSION["email"] = $response->email;
