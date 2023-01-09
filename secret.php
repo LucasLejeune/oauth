@@ -18,6 +18,6 @@ if(!isset($_SESSION['email'])) {
 </head> 
 <body>
     <h1>Cette page ne devrait pas être accessible</h1>
-    <?= dump($_SESSION) ?>
+    <?= var_dump($_SESSION) ?>
 </body>
 </html>
